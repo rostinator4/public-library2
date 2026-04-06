@@ -1,121 +1,103 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [query, setQuery] = useState('Crime and Punishment');
+  const [filter, setFilter] = useState('q'); // New state for filtering type
+  const [sort, setSort] = useState('title');
+  const [works, setWorks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (query) fetchBooks();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [query, sort, filter]);
+
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://openlibrary.org/search.json?${filter}=${query}&sort=${sort}`,
+        { headers: { 'User-Agent': 'public-library (dadajanovrostislav@gmail.com)' } }
+      );
+      const data = await response.json();
+      const bookObjects = data.docs.map(book => ({
+        title: book.title,
+        author: book.author_name ? book.author_name[0] : "Unknown",
+        year: book.first_publish_year || "N/A",
+        id: book.key,
+      }));
+      setWorks(bookObjects);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div id="root">
+      <aside className="glass-panel dashboard-sidebar">
+        <h1>Library📚</h1>
+        <button className="nav-btn">Dashboard</button>
+        <button className="nav-btn">Search 🔍</button>
+        <button className="nav-btn">About 🤷‍♀️</button>
+      </aside>
 
-      <div className="ticks"></div>
+      <main className="glass-panel search-results-area">
+        <div className="search-container">
+          <div className="input-group">
+            {/* FILTER DROPDOWN */}
+            <select
+              className="filter-dropdown"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="q">All</option>
+              <option value="title">Title</option>
+              <option value="author">Author</option>
+            </select>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            <input
+              type="text"
+              placeholder={`Search by ${filter === 'q' ? 'keyword' : filter}...`}
+              className="search-input"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <select
+              className="sort-dropdown"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}>
+              <option value="title">A-Z</option>
+              <option value="new">Newest</option>
+              <option value="old">Oldest</option>
+            </select>
+          </div>
+        </div>
+
+        <h2>Search Results</h2>
+
+        <div className="results-grid">
+          {loading ? (
+            <div className="status-message">Searching the archives...</div>
+          ) : works.length > 0 ? (
+            works.map((book) => (
+              <div key={book.id} className="result-row">
+                <div className="row-title">{book.title}</div>
+                <div className="row-author">{book.author}</div>
+                <div className="row-year">{book.year}</div>
+              </div>
+            ))
+          ) : (
+            <div className="status-message">No results found.</div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
