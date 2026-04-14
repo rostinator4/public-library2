@@ -1,221 +1,254 @@
-#root {
+
+.app-container {
   background-image: url('./assets/background.jpg');
   background-size: cover;
   background-position: center;
-  min-height: 100dvh;
-  width: 100%;
+  height: 100vh; 
+  width: 100vw;
   display: flex; 
-  flex-direction: row; 
-  align-items: stretch;
+  flex-direction: row; /* This is what puts the sidebar on the left */
   gap: 20px;
   padding: 20px;
   box-sizing: border-box;
+  overflow: hidden; 
 }
 
-
-.dashboard-sidebar {
-  flex: 0 0 15%; 
-  min-width: 180px; /* Prevents it from getting too skinny on small screens */
-  background: rgba(0, 0, 0, 0.20); /* Darker shade for contrast against the sidebar */
+.glass-panel {
+  background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(15px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-sidebar {
+  /* Changed from 15% to 20% */
+  flex: 0 0 20%; 
+  
+  
+  min-width: 220px; 
+  padding: 25px 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   color: white;
 }
 
-/* The Right Content Area (Remaining 85%) */
-.search-results-area {
-  flex: 1; 
-  background: rgba(0, 0, 0, 0.20); /* Darker shade for contrast against the sidebar */
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 30px;
-  color: white;
-  overflow-y: auto;
+.dashboard-sidebar h1 {
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .nav-btn {
-  background: rgba(52, 152, 219, 0.7); /* Semi-transparent blue to match the glass */
+  display: block; /* Add this! Forces the <a> tag to act like a structural box */
+  background: rgba(52, 152, 219, 0.7);
   color: white;
+  text-decoration: none;
+  text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 14px 20px;
+  
+  /* Now this padding will actually work! */
+  padding: 20px 30px; 
+  
   font-size: 1rem;
-  border-radius: 50px; /* Fully circular ends */
+  font-weight: 600;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
+  
+  /* Optional: Ensures the padding doesn't accidentally make the button wider than the sidebar */
+  box-sizing: border-box; 
 }
 
 .nav-btn:hover {
-  background: rgba(52, 152, 219, 1); /* Solid blue on hover */
-  transform: translateY(-2px);       /* Slight "lift" effect */
+  background: rgba(52, 152, 219, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
 
-.aligned-cards {
-  display: flex;          /* Turns on the horizontal layout */
-  flex-direction: row;    /* Ensures they stay in a line */
-  flex-wrap: wrap;        /* Allows cards to move to the next line if the screen is too narrow */
-  gap: 20px;              /* Adds space between the cards */
-  justify-content: flex-start; /* Aligns them to the left (use 'center' to center them) */
-  padding: 10px;
+
+.main-content {
+  flex: 1; 
+  
+  padding: 30px 40px;
+  color: white;
+  overflow-y: auto; 
+  scroll-behavior: smooth;
+}
+.main-content::-webkit-scrollbar { width: 8px; }
+.main-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+.main-content::-webkit-scrollbar-thumb { background: rgba(52, 152, 219, 0.5); border-radius: 10px; }
+.main-content::-webkit-scrollbar-thumb:hover { background: rgba(52, 152, 219, 0.8); }
+
+
+.explore-view {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Consistent spacing between Search, Charts, and Results */
 }
 
-.search-container {
-  margin-bottom: 30px; /* Space between search and cards */
-  width: 100%;
-}
+/* Search Bar Elements */
+.search-container { width: 100%; }
 
 .input-group {
   display: flex;
-  gap: 0; /* Remove gap to make them join */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden; /* Clips the corners of internal elements */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-.search-input, .filter-dropdown, .sort-dropdown {
+.search-input, .filter-dropdown {
   background: transparent;
   border: none;
-  padding: 12px 15px;
+  padding: 15px 20px;
   color: white;
   outline: none;
+  font-size: 1rem;
 }
 
 .search-input {
-  flex: 1; /* Input takes all remaining space */
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.filter-dropdown, .sort-dropdown {
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: bold;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.filter-dropdown:hover, .sort-dropdown:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Style the placeholder */
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* Make the dropdown a bit smaller */
-.sort-dropdown {
   flex: 1;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+.search-input:focus { background: rgba(255, 255, 255, 0.1); }
+
+.filter-dropdown {
   cursor: pointer;
-  appearance: none; /* Removes default browser arrow */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white'%3E%3Cpath d='M0 3l6 6 6-6z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  padding-right: 35px;
+  font-weight: bold;
+  color: #3498db;
+}
+.filter-dropdown option { background: #2c3e50; color: white; }
+
+/* Dashboard Charts Elements */
+.charts-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensures charts stack on smaller screens */
 }
 
-/* Focus effects */
-.search-input:focus, .sort-dropdown:focus {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(52, 152, 219, 0.8);
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+.chart-container {
+  flex: 1;
+  padding: 20px;
+  min-width: 300px;
+  text-align: center;
 }
 
-/* Placeholder color */
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+.chart-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: #fff;
+  letter-spacing: 1px;
 }
 
-/* Styling the dropdown options (Limited by browser) */
-.sort-dropdown option {
-  background: #2c3e50; /* Dark background so options are readable */
-  color: white;
-}
-
+/* Results Grid Elements */
 .results-grid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-  
-  /* --- Scroll Logic --- */
-  max-height: 65vh;      /* Limits height to 65% of the screen */
-  overflow-y: auto;      /* Enables vertical scrolling */
-  padding-right: 10px;   /* Prevents scrollbar from touching the text */
+  gap: 12px;
 }
 
-/* Custom Scrollbar for a "Glass" look */
-.results-grid::-webkit-scrollbar {
-  width: 8px;
-}
-
-.results-grid::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.results-grid::-webkit-scrollbar-thumb {
-  background: rgba(52, 152, 219, 0.4); /* Matches your year/blue color */
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.results-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(52, 152, 219, 0.7);
+.result-row-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .result-row {
   display: grid;
   grid-template-columns: 3fr 2fr 0.5fr;
   align-items: center;
-  padding: 15px 25px;
+  padding: 18px 25px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(8px);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.2s ease, background 0.2s ease;
-  
-  /* Ensures rows don't shrink when scrolling */
-  flex-shrink: 0; 
+  transition: all 0.2s ease;
 }
 
 .result-row:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateX(5px); /* Slide right instead of scaling for a cleaner list feel */
-  border-color: rgba(52, 152, 219, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(8px);
+  border-left: 4px solid #3498db; /* Nice highlight effect on hover */
 }
 
-.row-title {
-  font-weight: 600;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.row-author {
-  color: rgba(255, 255, 255, 0.8);
-  font-style: italic;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.row-year {
-  color: #3498db;
-  font-weight: bold;
-  text-align: right;
-  font-size: 0.9rem;
-}
+.row-title { font-weight: 600; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-author { color: rgba(255, 255, 255, 0.7); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-year { color: #3498db; font-weight: bold; text-align: right; }
 
 .status-message {
   text-align: center;
-  padding: 50px;
-  opacity: 0.6;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.details-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  align-self: flex-start;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.back-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+/* 1. Make the main card stack vertically so the title gets the full width at the top */
+.details-card { 
+  display: flex; 
+  flex-direction: column; /* Changed from row to column */
+  gap: 30px; 
+  padding: 40px; 
+}
+
+/* 2. The title gets room to breathe now */
+.details-card h1 {
+  margin: 0;
+  font-size: 2.8rem;
+  line-height: 1.2;
+  color: #3498db;
+  text-align: left;
+}
+
+/* 3. Make the image and the text sit side-by-side */
+.details-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+/* 4. Text takes up the remaining space */
+.details-text { 
+  flex: 1; 
+  text-align: left;
+}
+
+.details-text h3 {
+  margin-top: 0;
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
 }
