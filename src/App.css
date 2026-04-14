@@ -214,15 +214,15 @@
 
 .back-btn:hover { background: rgba(255, 255, 255, 0.25); }
 
-
+/* 1. Make the main card stack vertically so the title gets the full width at the top */
 .details-card { 
   display: flex; 
-  flex-direction: column; 
+  flex-direction: column; /* Changed from row to column */
   gap: 30px; 
   padding: 40px; 
 }
 
-
+/* 2. The title gets room to breathe now */
 .details-card h1 {
   margin: 0;
   font-size: 2.8rem;
@@ -231,7 +231,7 @@
   text-align: left;
 }
 
-
+/* 3. Make the image and the text sit side-by-side */
 .details-content {
   display: flex;
   flex-direction: row;
@@ -239,7 +239,7 @@
   gap: 40px;
 }
 
-
+/* 4. Text takes up the remaining space */
 .details-text { 
   flex: 1; 
   text-align: left;

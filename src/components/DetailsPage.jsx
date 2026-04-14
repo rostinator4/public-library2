@@ -32,6 +32,7 @@ const DetailsPage = () => {
       <div className="details-card glass-panel">
         <h1>{details.title}</h1>
         <div className="details-content">
+          {/* Open Library cover images follow this pattern */}
           {details.covers && (
             <img 
               src={`https://covers.openlibrary.org/b/id/${details.covers[0]}-L.jpg`} 

@@ -2,6 +2,8 @@ import About from './components/About';
 import ExploreView from './components/ExploreView';
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import SearchPage from './components/SearchPage';
 import DetailsPage from './components/DetailsPage';
 import './App.css';
 
@@ -49,6 +51,8 @@ function App() {
 
       <aside className="glass-panel dashboard-sidebar">
         <h1>Library📚</h1>
+
+        {/* Wrap the buttons in this div! */}
         <div className="nav-links">
           <Link to="/" className="nav-btn">Explore 🔍</Link>
           <Link to="/about" className="nav-btn">About 🤷‍♀️</Link>
