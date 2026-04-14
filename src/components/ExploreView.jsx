@@ -6,7 +6,6 @@ const COLORS = ['#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#9b59b6'];
 
 const ExploreView = ({ works = [], loading, query, setQuery, filter, setFilter }) => {
   
-  // --- 1. CHART DATA CALCULATION ---
   const chartData = useMemo(() => {
     if (!works || !works.length) return { yearData: [], authorData: [] };
 
@@ -46,8 +45,6 @@ const ExploreView = ({ works = [], loading, query, setQuery, filter, setFilter }
         </div>
       </div>
 
-      {/* --- 3. DASHBOARD CHARTS --- */}
-      {/* Only show the charts if we aren't loading AND we have results */}
       {!loading && works?.length > 0 && (
         <div className="charts-wrapper">
           <div className="chart-container glass-panel">
@@ -75,7 +72,6 @@ const ExploreView = ({ works = [], loading, query, setQuery, filter, setFilter }
         </div>
       )}
 
-      {/* --- 4. RESULTS LIST --- */}
       <h2 style={{ marginBottom: '15px' }}>Search Results</h2>
       <div className="results-grid">
         {loading ? (
